@@ -1,0 +1,66 @@
+import random
+import re
+from difflib import get_close_matches
+
+def islem_yap(sayi1, sayi2, islem):
+    if islem == "topla":
+        return sayi1 + sayi2
+    elif islem == "cikar":
+        return sayi1 - sayi2
+    elif islem == "carp":
+        return sayi1 * sayi2
+    elif islem == "bol":
+        if sayi2 != 0:
+            return sayi1 / sayi2
+        else:
+            return "Hata: Sıfıra bölme hatası!"
+    else:
+        return "Hata: Geçersiz işlem!"
+
+def duzeltme_yap(kelime, kelime_listesi):
+    yakın_kelime = get_close_matches(kelime, kelime_listesi, n=1)
+    if yakın_kelime:
+        return yakın_kelime[0]
+    else:
+        return kelime
+
+def yanit_al(soru):
+    soru = soru.lower().strip()
+    
+    if "merhaba" in soru:
+        return "Merhaba, nasıl yardımcı olabilirim?"
+    elif "nasılsın" in soru:
+        return "Ben bir yapay zeka olduğum için hissetmiyorum, ama teşekkür ederim! Siz nasılsınız?"
+    elif "selam" in soru:
+        return "Selam, nasıl yardımcı olabilirim?"
+    elif "hava durumu" in soru:
+        return "Hava durumu hakkında bilgi veremem, ama vereceğim linkten ulaşabilirsiniz.\nhttps://www.mgm.gov.tr/tahmin/il-ve-ilceler.aspx?il=İstanbul"
+    elif "güle güle" in soru:
+        return "Görüşmek üzere! İyi günler dilerim."
+    elif "işlem" in soru:
+        sayi1 = float(input("Birinci sayıyı girin: "))
+        sayi2 = float(input("İkinci sayıyı girin: "))
+        islem = input("Bu iki sayıyla ne yapmamı istersiniz? ")
+
+        sonuc = islem_yap(sayi1, sayi2, islem)
+        return "Sonuç: " + str(sonuc)
+    elif "ne yapabilirsin" in soru:
+        return "Ben basit bir yapay zeka modeliyim. Belli komutlara cevap verebilirim. Örneğin, 'selam' sorusuna 'Selam, nasıl yardımcı olabilirim?' cevabını verebilirim. Veya bana 'işlem' yazarsan, senin için matematiksel işlemleri yapabilirim."
+    else:
+        # Yazım hatasını düzeltme işlemi
+        kelimeler = re.findall(r'\w+', soru)
+        duzeltilmis_soru = soru
+        for kelime in kelimeler:
+            if kelime not in soru and " " in kelime:
+                duzeltilmis_kelime = duzeltme_yap(kelime, kelimeler)
+                duzeltilmis_soru = duzeltilmis_soru.replace(kelime, duzeltilmis_kelime)
+        
+        if duzeltilmis_soru != soru:
+            return "Üzgünüm, anlamadım. Belki de şunu demek istediniz: " + duzeltilmis_soru
+        else:
+            return "Üzgünüm, anlamadım. Ben basit bir yapay zeka modeliyim, lütfen anlayabileceğim sorular sorun. \nBana sorabileceğin soruların bir listesini çıkardım;\n-selam\n-merhaba\n-nasılsın\n-hava nasıl\n-güle güle\n-işlem"
+
+while True:
+    soru = input("Soru: ")
+    yanit = yanit_al(soru)
+    print("Yapay Zeka: " + yanit)
