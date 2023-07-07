@@ -35,6 +35,8 @@ def yanit_al(soru):
         return "Selam, nasıl yardımcı olabilirim?"
     elif "hava durumu" in soru:
         return "Hava durumu hakkında bilgi veremem, ama vereceğim linkten ulaşabilirsiniz.\nhttps://www.mgm.gov.tr/tahmin/il-ve-ilceler.aspx?il=İstanbul"
+    elif "sen insan mısın" in soru:
+        return "Hayır, ben bir basit yapay zeka modeliyim. Amacım size yardımcı olmak."
     elif "güle güle" in soru:
         return "Görüşmek üzere! İyi günler dilerim."
     elif "işlem" in soru:
@@ -51,16 +53,18 @@ def yanit_al(soru):
         kelimeler = re.findall(r'\w+', soru)
         duzeltilmis_soru = soru
         for kelime in kelimeler:
-            if kelime not in soru and " " in kelime:
+            if kelime != soru and " " in kelime:
                 duzeltilmis_kelime = duzeltme_yap(kelime, kelimeler)
                 duzeltilmis_soru = duzeltilmis_soru.replace(kelime, duzeltilmis_kelime)
         
         if duzeltilmis_soru != soru:
             return "Üzgünüm, anlamadım. Belki de şunu demek istediniz: " + duzeltilmis_soru
         else:
-            return "Üzgünüm, anlamadım. Ben basit bir yapay zeka modeliyim, lütfen anlayabileceğim sorular sorun. \nBana sorabileceğin soruların bir listesini çıkardım;\n-selam\n-merhaba\n-nasılsın\n-hava nasıl\n-güle güle\n-işlem"
+            return "Üzgünüm, anlamadım. Ben basit bir yapay zeka modeliyim, lütfen anlayabileceğim sorular sorun. \nBana sorabileceğin soruların bir listesini çıkardım;\n -selam\n-merhaba\n-nasılsın\n-hava nasıl\n-güle güle\n-işlem"
 
 while True:
     soru = input("Soru: ")
     yanit = yanit_al(soru)
     print("Yapay Zeka: " + yanit)
+
+
